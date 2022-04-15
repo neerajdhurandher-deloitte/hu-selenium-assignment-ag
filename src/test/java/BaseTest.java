@@ -11,9 +11,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-import pages.CartPage;
-import pages.SunsCreamPage;
-import pages.TemperaturePage;
+import pages.*;
 
 import java.time.Duration;
 
@@ -21,8 +19,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class BaseTest {
     TemperaturePage temperaturePage;
-    CartPage cartPage;
     SunsCreamPage sunsCreamPage;
+    MoisturizersPage moisturizersPage;
+    CartPage cartPage;
+    PaymentStatusPage paymentStatusPage;
 
     public ExtentSparkReporter extentSparkReporter;
     public static ExtentReports extentReports = new ExtentReports();
@@ -38,8 +38,10 @@ public class BaseTest {
         driver.get("https://weathershopper.pythonanywhere.com");
 
         temperaturePage = new TemperaturePage(driver,log);
-        cartPage = new CartPage(driver,log);
         sunsCreamPage = new SunsCreamPage(driver,log);
+        moisturizersPage = new MoisturizersPage(driver,log);
+        cartPage = new CartPage(driver,log);
+        paymentStatusPage = new PaymentStatusPage(driver,log);
 
         // extent report configuration setup
         extentReportConfiguration();
@@ -90,14 +92,14 @@ public class BaseTest {
 
         if(currentTemp < 19){
 
-//            goForMoisturizers();
-            goForSunscreens();
+            goForMoisturizers();
 
         }else if(currentTemp > 34){
 
             goForSunscreens();
 
         }else{
+
             driver.navigate().refresh();
         }
 
@@ -106,6 +108,27 @@ public class BaseTest {
     }
 
     private void goForMoisturizers() {
+
+        ExtentTest extentTest = extentReports.createTest("Select Moisturizer");
+
+        temperaturePage.clickMoisturizersBtn();
+
+
+        log.info("clickMoisturizerBtn");
+
+        moisturizersPage.clickIButton();
+
+        moisturizersPage.selectLeastItemInCategory("Aloe",extentTest);
+        moisturizersPage.selectLeastItemInCategory("Almond",extentTest);
+
+        cartPage.clickCartButton();
+
+        ExtentTest verifyCart = extentTest.createNode("verifying cart items");
+
+        if(cartPage.verifyCartItem(2,verifyCart)){
+
+            payToProcess();
+        }
     }
 
     private void goForSunscreens() {
@@ -152,6 +175,10 @@ public class BaseTest {
         cartPage.fillCardDetails(0);
 
         cartPage.payAmount();
+
+        driver.switchTo().defaultContent();
+
+        System.out.println("payment :- "+paymentStatusPage.paymentStatus());
 
 
     }

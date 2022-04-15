@@ -26,6 +26,9 @@ public class UtilClass {
 
     public static ArrayList<Card> cardArrayList = new ArrayList<>();
 
+    public UtilClass() {
+    }
+
     public UtilClass(WebDriver driver, Logger log){
         this.driver = driver;
         this.log = log;
@@ -55,13 +58,13 @@ public class UtilClass {
         System.out.println("click ok in alert box");
     }
 
-    public void takeScreenshot(String path ,String fileName) throws IOException, AWTException {
+    public void takeScreenshot(String fileName) throws IOException, AWTException {
         fileName = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date())+fileName;
 
         String destination = System.getProperty("user.dir").toLowerCase(Locale.ROOT);
 
         BufferedImage image = new Robot().createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
-        ImageIO.write(image, "png", new File(path+fileName+".png"));
+        ImageIO.write(image, "png", new File(destination+"/"+fileName+".png"));
     }
 
 
@@ -102,7 +105,7 @@ public class UtilClass {
 
             int price = Integer.parseInt(priceTag);
 
-            if(price < minPrice && productName.contains(category)){
+            if(price < minPrice && productName.toLowerCase().contains(category.toLowerCase())){
                 minPrice = price;
                 minPriceItemIndex = i;
                 minPriceItem = productName;

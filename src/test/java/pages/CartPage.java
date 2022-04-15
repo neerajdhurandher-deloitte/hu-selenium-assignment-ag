@@ -76,7 +76,7 @@ public class CartPage extends UtilClass {
         for(int i = 0;i < cardNo.length();i+=4){
 
             String val = cardNo.substring(i,i+4);
-            driver.findElement(By.cssSelector("input[id*= 'card_number']")).sendKeys(val);
+            driver.findElement(By.xpath("//input[@id= 'card_number']")).sendKeys(val);
         }
 
 //        driver.findElement(By.cssSelector("input[id*= 'card_number']")).sendKeys("4242424242424240");

@@ -1,3 +1,4 @@
+import Util.UtilClass;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -6,6 +7,9 @@ import java.awt.*;
 import java.io.IOException;
 
 public class Listener extends BaseTest implements ITestListener {
+
+    UtilClass utilClass = new UtilClass();
+
     @Override
     public void onTestStart(ITestResult result) {
         super.init();
@@ -21,11 +25,11 @@ public class Listener extends BaseTest implements ITestListener {
     @Override
     public void onTestFailure(ITestResult result) {
         System.out.println("Test Failed");
-//        try {
-//            mainClass.takeScreenshot("Failed Cases","Failed Test case");
-//        } catch (IOException | AWTException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            utilClass.takeScreenshot("Failed Test case");
+        } catch (IOException | AWTException e) {
+            e.printStackTrace();
+        }
         ITestListener.super.onTestFailure(result);
     }
 
