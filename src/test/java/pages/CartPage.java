@@ -79,6 +79,8 @@ public class CartPage extends UtilClass {
             driver.findElement(By.cssSelector("input[id*= 'card_number']")).sendKeys(val);
         }
 
+//        driver.findElement(By.cssSelector("input[id*= 'card_number']")).sendKeys("4242424242424240");
+
 
         driver.findElement(By.cssSelector("input[id*='email']")).sendKeys(card.getEmail());
         log.info("email " + card.getEmail());

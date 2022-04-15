@@ -149,7 +149,7 @@ public class BaseTest {
 
         driver.switchTo().frame(frame);
 
-        cartPage.fillCardDetails(1);
+        cartPage.fillCardDetails(0);
 
         cartPage.payAmount();
 
