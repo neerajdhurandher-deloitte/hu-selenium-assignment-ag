@@ -26,12 +26,22 @@ public class UtilClass {
 
     public static ArrayList<Card> cardArrayList = new ArrayList<>();
 
+    static String screenShotsDestination = "src/test/java/Reports/ScreenShots/";
+
+
+
+    String iBtnXpath = "(//span[contains(@class,'octicon octicon-info')])";
+    String addCartBtnXpath = "(//button[contains(@class,'btn btn-primary')]) [";
+    String priceTagXpath = "//p[contains(text(),'Price:')] ";
+    String productXpath = "//p[@class ='font-weight-bold top-space-10'] ";
+
+
     public UtilClass() {
     }
 
-    public UtilClass(WebDriver driver, Logger log){
-        this.driver = driver;
-        this.log = log;
+    public void setDriverAndLog(WebDriver driver, Logger log){
+        UtilClass.driver = driver;
+        UtilClass.log = log;
     }
 
     public void readCardDetailExcelSheet(ExtentTest extentTest){
@@ -67,8 +77,7 @@ public class UtilClass {
 
         fileName += new SimpleDateFormat("yyyyMMddhhmmss").format(new Date())+".png";
 
-        String destination = "src/test/java/Reports/ScreenShots/";
-        String filePath = destination + fileName;
+        String filePath = screenShotsDestination + fileName;
 
         try {
 
@@ -83,6 +92,7 @@ public class UtilClass {
             log.error(exception);
             extentTest.log(Status.FAIL,"Screenshot captured unsuccessfully");
             extentTest.log(Status.FAIL,exception.getMessage());
+            exception.printStackTrace();
 
         }
 
@@ -91,11 +101,11 @@ public class UtilClass {
 
 
     public void addCartNthItem(int index) {
-        driver.findElement(By.xpath("(//button[contains(@class,'btn btn-primary')]) ["+index+"]")).click();
+        driver.findElement(By.xpath(addCartBtnXpath+index+"]")).click();
     }
 
     public void clickIButton(){
-        driver.findElement(By.xpath("(//span[contains(@class,'octicon octicon-info')])")).click();
+        driver.findElement(By.xpath(iBtnXpath)).click();
     }
 
 
@@ -105,9 +115,9 @@ public class UtilClass {
         int minPrice = Integer.MAX_VALUE;
         String minPriceItem = "";
 
-        List<WebElement> priceWebElementList = driver.findElements(By.xpath("//p[contains(text(),'Price:')] "));
+        List<WebElement> priceWebElementList = driver.findElements(By.xpath(priceTagXpath));
 
-        List<WebElement> productList = driver.findElements(By.xpath("//p[@class ='font-weight-bold top-space-10'] "));
+        List<WebElement> productList = driver.findElements(By.xpath(productXpath));
 
         System.out.println("priceWebElementList size " + priceWebElementList.size());
         System.out.println("productList size " + productList.size());

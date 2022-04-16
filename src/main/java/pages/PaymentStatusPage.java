@@ -8,15 +8,8 @@ import org.openqa.selenium.WebElement;
 import java.time.Duration;
 import org.testng.Assert;
 
-public class PaymentStatusPage {
+public class PaymentStatusPage extends BasePage{
 
-    WebDriver driver;
-    Logger log;
-
-    public PaymentStatusPage(WebDriver driver, Logger log){
-        this.driver = driver;
-        this.log =log;
-    }
 
     public String paymentStatus(){
         WebElement paymentStatusElement = driver.findElement(By.xpath("//div[@class = 'row justify-content-center']"));

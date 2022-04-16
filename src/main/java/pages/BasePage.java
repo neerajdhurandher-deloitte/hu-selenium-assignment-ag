@@ -15,15 +15,12 @@ public class BasePage extends UtilClass {
     WebDriver driver;
     public static  ExtentSparkReporter extentSparkReporter;
     public static ExtentReports extentReports = new ExtentReports();
-    public static Logger log = Logger.getLogger(BasePage.class);
+    Logger log = Logger.getLogger(BasePage.class);
 
 
 
     String chromeDriverPath = "src/main/resources/chrome-driver/chromedriver.exe";
-
-    public BasePage(){
-
-    }
+    String webUrl = "https://weathershopper.pythonanywhere.com";
 
     protected void webDriverSetUp(){
         // set web driver
@@ -33,8 +30,10 @@ public class BasePage extends UtilClass {
         log.info("Web browser driver setup");
 
         // url hit
-        driver.get("https://weathershopper.pythonanywhere.com");
+        driver.get(webUrl);
         log.info("Website Url hit");
+
+        setDriverAndLog(driver,log);
     }
 
     // extent report configuration setup

@@ -5,27 +5,38 @@ import com.aventstack.extentreports.ExtentTest;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 
+import java.util.ArrayList;
+
 public class SunsCreamPage extends BasePage {
 
-    WebDriver driver;
-    Logger log;
+    private ArrayList<String> item_Category_List = new ArrayList<>();
 
 
-    public SunsCreamPage(WebDriver driver, Logger log) {
-        this.driver = driver;
-        this.log = log;
-    }
+    public void selectLeastItemInCategory(){
 
-    public void selectLeastItemInCategory(String category, ExtentTest extentTest){
+        ExtentTest sunscreensPurchaseET = extentReports.createTest("Select SunsCream");
 
-        int index;
+        ExtentTest sunscreenNodeET = sunscreensPurchaseET.createNode("Purchased Sunscreens List");
 
-        try {
-            index = super.leastExpensiveItemInCategory(category,extentTest);
-            super.addCartNthItem(index);
-        }catch (Exception e){
-            log.info(e.getMessage());
+        loadItems();
+
+        for (String category : item_Category_List) {
+
+            int index;
+
+            try {
+                index = super.leastExpensiveItemInCategory(category, sunscreenNodeET);
+                super.addCartNthItem(index);
+            } catch (Exception e) {
+                log.info(e.getMessage());
+            }
         }
 
+    }
+
+    private void loadItems() {
+
+        item_Category_List.add("SPF-30");
+        item_Category_List.add("SPF-50");
     }
 }

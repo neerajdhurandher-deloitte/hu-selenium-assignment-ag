@@ -1,21 +1,15 @@
 package pages;
 
-import Util.UtilClass;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
-import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
-import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 
 
 public class TemperaturePage extends BasePage{
 
-    private WebDriver driver;
-    private Logger log;
+    SunsCreamPage sunsCreamPage = new SunsCreamPage();
+    MoisturizersPage moisturizersPage = new MoisturizersPage();
 
     private WebElement webElement;
 
@@ -24,36 +18,30 @@ public class TemperaturePage extends BasePage{
     String moisturizerBtnXpath = "//button[text() = 'Buy moisturizers']";
 
 
+    private int currentTemp;
 
-
-
-    public TemperaturePage(WebDriver driver, Logger log) {
-        this.driver = driver;
-        this.log = log;
-
-    }
-
-    public int getTemperature(){
+    public void getTemperature(){
 
         webElement = driver.findElement(By.xpath(tempTextXpath));
         String currentTemp = webElement.getText();
         String[] arrOfStr = currentTemp.split(" ");
 
-        return Integer.parseInt(arrOfStr[0]);
+        this.currentTemp =  Integer.parseInt(arrOfStr[0]);
     }
 
     public void choiceForPurchase() {
 
         ExtentTest tempTest = extentReports.createTest("Temperature Page Test");
 
-        int currentTemp = getTemperature();
 
         log.info("Current temperature is :- " + currentTemp);
         tempTest.log(Status.PASS, "Current Temperature :- " + currentTemp);
 
-        String filePath = utilClass.takeScreenshot("Current_Temperature", tempTest);
+        String filePath = takeScreenshot("Current_Temperature", tempTest);
 
         tempTest.addScreenCaptureFromPath("ScreenShots/" + filePath, "Current Temperature Screenshot");
+
+        clickIButton();
 
 
         if (currentTemp < 19) {
@@ -74,52 +62,17 @@ public class TemperaturePage extends BasePage{
 
     private void goForMoisturizers() {
 
-        ExtentTest extentTest = extentReports.createTest("Select Moisturizer");
-
         clickMoisturizersBtn();
 
-        log.info("clickMoisturizerBtn");
+        moisturizersPage.selectLeastItemInCategory();
 
-        clickIButton();
-
-        selectLeastItemInCategory("Aloe",extentTest);
-        selectLeastItemInCategory("Almond",extentTest);
-
-        clickCartButton();
-
-        ExtentTest verifyCart = extentTest.createNode("verifying cart items");
-
-        if(cartPage.verifyCartItem(2,verifyCart)){
-
-            payToProcess();
-        }
     }
 
     private void goForSunscreens() {
 
-        ExtentTest sunscreensPurchaseET = extentReports.createTest("Select SunsCream");
+        clickSunscreensBtn();
 
-        temperaturePage.clickSunscreensBtn();
-
-        sunsCreamPage.clickIButton();
-        sunscreensPurchaseET.log(Status.PASS,"Get the info");
-
-        ExtentTest purchaseSunscreensET = sunscreensPurchaseET.createNode("Purchased Sunscreens List");
-
-        sunsCreamPage.selectLeastItemInCategory("SPF-50",purchaseSunscreensET);
-        sunsCreamPage.selectLeastItemInCategory("SPF-30",purchaseSunscreensET);
-
-        cartPage.clickCartButton();
-
-        ExtentTest verifyCart = extentTest.createNode("verifying cart items");
-
-        if(cartPage.verifyCartItem(2,verifyCart)){
-            payToProcess();
-        }
-
-
-
-
+        sunsCreamPage.selectLeastItemInCategory();
     }
 
     public void clickSunscreensBtn(){

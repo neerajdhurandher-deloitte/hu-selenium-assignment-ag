@@ -16,14 +16,7 @@ import static org.hamcrest.Matchers.is;
 import java.time.Duration;
 import java.util.List;
 
-public class CartPage extends UtilClass {
-    WebDriver driver;
-    Logger log;
-
-    public CartPage(WebDriver driver, Logger log) {
-        this.driver = driver;
-        this.log = log;
-    }
+public class CartPage extends BasePage {
 
     public void clickCartButton(){
         driver.findElement(By.xpath("(//button[contains(@class,'thin-text nav-link')])")).click();

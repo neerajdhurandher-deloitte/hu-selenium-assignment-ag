@@ -21,7 +21,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class BaseTest extends BasePage{
 
     UtilClass utilClass;
-    BasePage basePage;
     TemperaturePage temperaturePage;
     SunsCreamPage sunsCreamPage;
     MoisturizersPage moisturizersPage;
@@ -39,23 +38,11 @@ public class BaseTest extends BasePage{
 
         extentReportConfiguration();
 
-        basePage = new BasePage();
-        utilClass = new UtilClass(driver,log);
-        temperaturePage = new TemperaturePage(driver,log);
-        sunsCreamPage = new SunsCreamPage(driver,log);
-        moisturizersPage = new MoisturizersPage(driver,log);
-        cartPage = new CartPage(driver,log);
-        paymentStatusPage = new PaymentStatusPage(driver,log);
-
-
-
-        // read card details excels file
-        cartPage.readCardDetailExcelSheet(extentTest);
-
-
-
-
-
+        temperaturePage = new TemperaturePage();
+        sunsCreamPage = new SunsCreamPage();
+        moisturizersPage = new MoisturizersPage();
+        cartPage = new CartPage();
+        paymentStatusPage = new PaymentStatusPage();
 
     }
 
@@ -64,7 +51,9 @@ public class BaseTest extends BasePage{
     @Test
     public void test1(){
 
+        temperaturePage.getTemperature();
 
+        temperaturePage.choiceForPurchase();
 
 
 
@@ -98,7 +87,6 @@ public class BaseTest extends BasePage{
 
     @AfterTest
     public  void closeBrowser(){
-        log.info("Web driver closed");
 //        actionEvents.closeWindow();
         extentReports.flush();
     }

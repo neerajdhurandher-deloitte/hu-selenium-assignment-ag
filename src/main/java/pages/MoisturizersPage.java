@@ -6,28 +6,39 @@ import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.ArrayList;
+
 public class MoisturizersPage extends BasePage{
-    private WebDriver driver;
-    private Logger log;
 
-    private WebElement webElement;
 
-    public MoisturizersPage(WebDriver driver, Logger log) {
-        this.driver = driver;
-        this.log = log;
+    private ArrayList<String> item_Category_List = new ArrayList<>();
+
+
+    public void selectLeastItemInCategory(){
+
+        ExtentTest moisturizerPurchaseET = extentReports.createTest("Select Moisturizer");
+
+        ExtentTest moisturizerNodeET = moisturizerPurchaseET.createNode("Purchased Moisturizers List");
+
+        loadItems();
+
+        for (String category : item_Category_List) {
+
+            int index;
+
+            try {
+                index = super.leastExpensiveItemInCategory(category, moisturizerNodeET);
+                super.addCartNthItem(index);
+            } catch (Exception e) {
+                log.info(e.getMessage());
+            }
+        }
 
     }
 
-    public void selectLeastItemInCategory(String category, ExtentTest extentTest){
+    private void loadItems() {
 
-        int index;
-
-        try {
-            index = super.leastExpensiveItemInCategory(category,extentTest);
-            super.addCartNthItem(index);
-        }catch (Exception e){
-            log.info(e.getMessage());
-        }
-
+        item_Category_List.add("Aloe");
+        item_Category_List.add("Almond");
     }
 }
