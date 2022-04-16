@@ -55,33 +55,13 @@ public class BaseTest extends BasePage{
 
         temperaturePage.choiceForPurchase();
 
+        cartPage.clickCartButton();
 
+        cartPage.verifyCartItem();
 
-    }
-
-
-
-    private void payToProcess() {
-        ExtentTest extentTest = extentReports.createTest("Payment Test");
-
-        cartPage.clickPay();
-
-        WebElement frame = driver.findElement(By.xpath("//iframe[@class = 'stripe_checkout_app']"));
-
-        while (!frame.isDisplayed()){
-            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
-        }
-
-        driver.switchTo().frame(frame);
-
-        cartPage.fillCardDetails(0);
+        cartPage.payToProcess();
 
         cartPage.payAmount();
-
-        driver.switchTo().defaultContent();
-
-        System.out.println("payment :- "+paymentStatusPage.paymentStatus());
-
 
     }
 
