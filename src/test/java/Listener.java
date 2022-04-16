@@ -25,11 +25,11 @@ public class Listener extends BaseTest implements ITestListener {
     @Override
     public void onTestFailure(ITestResult result) {
         System.out.println("Test Failed");
-        try {
-            utilClass.takeScreenshot("Failed Test case");
-        } catch (IOException | AWTException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            utilClass.takeScreenshot("Failed Test case");
+//        } catch (IOException | AWTException e) {
+//            e.printStackTrace();
+//        }
         ITestListener.super.onTestFailure(result);
     }
 

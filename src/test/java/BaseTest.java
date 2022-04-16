@@ -1,3 +1,4 @@
+import Util.UtilClass;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
@@ -17,147 +18,59 @@ import java.time.Duration;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class BaseTest {
+public class BaseTest extends BasePage{
+
+    UtilClass utilClass;
+    BasePage basePage;
     TemperaturePage temperaturePage;
     SunsCreamPage sunsCreamPage;
     MoisturizersPage moisturizersPage;
     CartPage cartPage;
     PaymentStatusPage paymentStatusPage;
 
-    public ExtentSparkReporter extentSparkReporter;
-    public static ExtentReports extentReports = new ExtentReports();
-    Logger log = Logger.getLogger(BaseTest.class);
+
 
     WebDriver driver;
 
     @BeforeTest
     public void init() {
-        System.setProperty("webdriver.chrome.driver","src/main/resources/chrome-driver/chromedriver.exe");
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        driver.get("https://weathershopper.pythonanywhere.com");
 
+        webDriverSetUp();
+
+        extentReportConfiguration();
+
+        basePage = new BasePage();
+        utilClass = new UtilClass(driver,log);
         temperaturePage = new TemperaturePage(driver,log);
         sunsCreamPage = new SunsCreamPage(driver,log);
         moisturizersPage = new MoisturizersPage(driver,log);
         cartPage = new CartPage(driver,log);
         paymentStatusPage = new PaymentStatusPage(driver,log);
 
-        // extent report configuration setup
-        extentReportConfiguration();
+
 
         // read card details excels file
-        cartPage.readCardDetailExcelSheet();
+        cartPage.readCardDetailExcelSheet(extentTest);
 
 
 
 
-        ExtentTest extentTest = extentReports.createTest("Base Test");
-        extentTest.log(Status.PASS,"Test setup");
-        log.info("Base test initialized");
+
 
     }
 
-    private void extentReportConfiguration() {
-
-        // extent report configuration setup
-
-
-        extentSparkReporter = new ExtentSparkReporter("src/test/java//Reports/Test_Report.html");
-
-        extentSparkReporter.config().setEncoding("utf-8");
-        extentSparkReporter.config().setDocumentTitle("Selenium Assignment Report");
-        extentSparkReporter.config().setReportName("Test Reports");
-        extentSparkReporter.config().setTheme(Theme.DARK);
-
-
-        extentReports.setSystemInfo("Organization", "Hashedin By Deloitte");
-        extentReports.setSystemInfo("Created by ", "Neeraj Dhurandher");
-        extentReports.attachReporter(extentSparkReporter);
-    }
 
 
     @Test
     public void test1(){
 
-        ExtentTest extentTest = extentReports.createTest("Test 1");
-
-        ExtentTest e = extentTest.createNode("Title","des");
-        e.log(Status.PASS,"1");
-        e.log(Status.PASS,"2");
-        extentTest.addScreenCaptureFromPath("ScreenShots/ShoppingRecipient.png","Ss title path");
-
-        int  currentTemp = temperaturePage.getTemperature();
-        log.info("Current temperature is :- " + currentTemp);
-
-        if(currentTemp < 19){
-
-            goForMoisturizers();
-
-        }else if(currentTemp > 34){
-
-            goForSunscreens();
-
-        }else{
-
-            driver.navigate().refresh();
-        }
-
-
-
-    }
-
-    private void goForMoisturizers() {
-
-        ExtentTest extentTest = extentReports.createTest("Select Moisturizer");
-
-        temperaturePage.clickMoisturizersBtn();
-
-
-        log.info("clickMoisturizerBtn");
-
-        moisturizersPage.clickIButton();
-
-        moisturizersPage.selectLeastItemInCategory("Aloe",extentTest);
-        moisturizersPage.selectLeastItemInCategory("Almond",extentTest);
-
-        cartPage.clickCartButton();
-
-        ExtentTest verifyCart = extentTest.createNode("verifying cart items");
-
-        if(cartPage.verifyCartItem(2,verifyCart)){
-
-            payToProcess();
-        }
-    }
-
-    private void goForSunscreens() {
-
-        ExtentTest extentTest = extentReports.createTest("Select SunsCream");
-
-        temperaturePage.clickSunscreensBtn();
-
-
-        log.info("clickSunscreensBtn");
-
-        sunsCreamPage.clickIButton();
-
-        sunsCreamPage.selectLeastItemInCategory("SPF-50",extentTest);
-        sunsCreamPage.selectLeastItemInCategory("SPF-30",extentTest);
-
-        cartPage.clickCartButton();
-
-        ExtentTest verifyCart = extentTest.createNode("verifying cart items");
-
-        if(cartPage.verifyCartItem(2,verifyCart)){
-
-            payToProcess();
-        }
 
 
 
 
     }
+
+
 
     private void payToProcess() {
         ExtentTest extentTest = extentReports.createTest("Payment Test");

@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class UtilClass {
-    WebDriver driver;
-    Logger log;
+    static WebDriver driver;
+    static Logger log;
 
     public static ArrayList<Card> cardArrayList = new ArrayList<>();
 
@@ -34,14 +34,19 @@ public class UtilClass {
         this.log = log;
     }
 
-    public void readCardDetailExcelSheet(){
+    public void readCardDetailExcelSheet(ExtentTest extentTest){
+
+        ExtentTest readExcelReport = extentTest.createNode("Read Card Details Excel Sheet");
 
         try {
             CardExcelReader cardExcelReader = new CardExcelReader("src/main/resources/Data/cardDetails.xlsx");
             cardArrayList = cardExcelReader.readCardDetailsFile();
             log.info("read");
+            readExcelReport.log(Status.PASS,"Read Card Details Excel Sheet Successful");
         }catch (IOException exception){
             exception.printStackTrace();
+            readExcelReport.log(Status.FAIL,"Read Card Details Excel Sheet unsuccessful");
+            readExcelReport.log(Status.FAIL,exception.getMessage());
             log.error(exception.getMessage());
         }
 
@@ -58,13 +63,30 @@ public class UtilClass {
         System.out.println("click ok in alert box");
     }
 
-    public void takeScreenshot(String fileName) throws IOException, AWTException {
-        fileName = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date())+fileName;
+    public String takeScreenshot(String fileName, ExtentTest extentTest){
 
-        String destination = System.getProperty("user.dir").toLowerCase(Locale.ROOT);
+        fileName += new SimpleDateFormat("yyyyMMddhhmmss").format(new Date())+".png";
 
-        BufferedImage image = new Robot().createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
-        ImageIO.write(image, "png", new File(destination+"/"+fileName+".png"));
+        String destination = "src/test/java/Reports/ScreenShots/";
+        String filePath = destination + fileName;
+
+        try {
+
+            BufferedImage image = new Robot().createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
+            ImageIO.write(image, "png", new File(filePath));
+
+            log.error("Screenshot captured successfully");
+            extentTest.log(Status.PASS,"Screenshot captured successfully");
+
+        }catch (IOException | AWTException exception){
+            log.error("Screenshot captured unsuccessfully");
+            log.error(exception);
+            extentTest.log(Status.FAIL,"Screenshot captured unsuccessfully");
+            extentTest.log(Status.FAIL,exception.getMessage());
+
+        }
+
+        return fileName;
     }
 
 
@@ -91,13 +113,15 @@ public class UtilClass {
         System.out.println("productList size " + productList.size());
 
         if(priceWebElementList.size() != productList.size()){
+            extentTest.log(Status.FAIL,"something went wrong in item list");
+            log.error("something went wrong in item list");
             throw new Exception("something went wrong in item list");
         }
 
 
         for (int i = 0 ; i < priceWebElementList.size(); i++){
 
-            String productName = productList.get(i).getText();
+            String productName = productList.get(i).getText().toLowerCase();
 
             String priceTag = priceWebElementList.get(i).getText();
             priceTag = priceTag.replace("Rs. ", "");
@@ -105,18 +129,14 @@ public class UtilClass {
 
             int price = Integer.parseInt(priceTag);
 
-            if(price < minPrice && productName.toLowerCase().contains(category.toLowerCase())){
+            if(price < minPrice && productName.contains(category.toLowerCase())){
                 minPrice = price;
                 minPriceItemIndex = i;
                 minPriceItem = productName;
             }
-
-            System.out.println(price);
         }
 
-        extentTest.log(Status.PASS,"Least expensive item "+ minPriceItem+" Price :- "+ minPrice);
-
-        extentTest.log(Status.PASS,"Least expensive item "+ minPriceItem+" Price :- "+ minPrice);
+        extentTest.log(Status.PASS,"Least expensive item "+ minPriceItem+" Price :- "+ minPrice+" in " + category + " category.");
 
         return minPriceItemIndex+1;
 

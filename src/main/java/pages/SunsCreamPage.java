@@ -5,14 +5,13 @@ import com.aventstack.extentreports.ExtentTest;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 
-public class SunsCreamPage extends UtilClass {
+public class SunsCreamPage extends BasePage {
 
     WebDriver driver;
     Logger log;
 
 
     public SunsCreamPage(WebDriver driver, Logger log) {
-        super(driver,log);
         this.driver = driver;
         this.log = log;
     }

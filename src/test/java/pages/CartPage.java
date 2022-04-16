@@ -21,7 +21,6 @@ public class CartPage extends UtilClass {
     Logger log;
 
     public CartPage(WebDriver driver, Logger log) {
-        super(driver,log);
         this.driver = driver;
         this.log = log;
     }
@@ -38,7 +37,7 @@ public class CartPage extends UtilClass {
 
         try{
             assertThat(rows_table.size()-1,is(equalTo(validItemCount)));
-            verifyCart.log(Status.FAIL,"Cart items are verified.");
+            verifyCart.log(Status.PASS,"Cart items are verified.");
             log.info("Cart items are verified.");
             return true;
         }

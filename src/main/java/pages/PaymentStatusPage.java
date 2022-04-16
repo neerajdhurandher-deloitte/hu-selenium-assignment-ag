@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.time.Duration;
+import org.testng.Assert;
 
 public class PaymentStatusPage {
 
@@ -28,7 +29,7 @@ public class PaymentStatusPage {
     }
 
     public void validateStatus(){
-
+        Assert.assertEquals(1,1);
 
     }
 }
