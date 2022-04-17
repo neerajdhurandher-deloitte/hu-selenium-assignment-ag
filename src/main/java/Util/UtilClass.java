@@ -18,7 +18,6 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class UtilClass {
     static WebDriver driver;
@@ -27,7 +26,7 @@ public class UtilClass {
     public static ArrayList<Card> cardArrayList = new ArrayList<>();
 
     static String screenShotsDestination = "src/test/java/Reports/ScreenShots/";
-
+    static String imageExtension = ".png";
 
 
     String iBtnXpath = "(//span[contains(@class,'octicon octicon-info')])";
@@ -75,9 +74,7 @@ public class UtilClass {
 
     public String takeScreenshot(String fileName, ExtentTest extentTest){
 
-        fileName += new SimpleDateFormat("yyyyMMddhhmmss").format(new Date())+".png";
-
-        String filePath = screenShotsDestination + fileName;
+        String filePath = screenShotsDestination + fileName + imageExtension;
 
         try {
 
@@ -92,6 +89,24 @@ public class UtilClass {
             log.error(exception);
             extentTest.log(Status.FAIL,"Screenshot captured unsuccessfully");
             extentTest.log(Status.FAIL,exception.getMessage());
+            exception.printStackTrace();
+
+        }
+
+        return fileName+imageExtension;
+    }
+
+
+    public String takeScreenshot(String fileName){
+
+        String filePath = screenShotsDestination + fileName +".png";
+
+        try {
+            BufferedImage image = new Robot().createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
+            ImageIO.write(image, "png", new File(filePath));
+
+        }catch (IOException | AWTException exception){
+            log.error(exception);
             exception.printStackTrace();
 
         }
@@ -153,6 +168,10 @@ public class UtilClass {
     }
 
 
+    public String getCurrentDateTime(){
+
+        return  new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
+    }
 
 
 

@@ -1,4 +1,5 @@
 import Util.UtilClass;
+import org.apache.poi.ss.formula.functions.Slope;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -24,12 +25,12 @@ public class Listener extends BaseTest implements ITestListener {
 
     @Override
     public void onTestFailure(ITestResult result) {
-        System.out.println("Test Failed");
-//        try {
-//            utilClass.takeScreenshot("Failed Test case");
-//        } catch (IOException | AWTException e) {
-//            e.printStackTrace();
-//        }
+
+        log.info("Test Failed");
+        log.error("Test Failed");
+
+        takeScreenshot("Failed Test case" + getCurrentDateTime());
+
         ITestListener.super.onTestFailure(result);
     }
 

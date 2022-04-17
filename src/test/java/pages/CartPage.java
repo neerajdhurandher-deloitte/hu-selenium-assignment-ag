@@ -40,18 +40,25 @@ public class CartPage extends BasePage {
 
         ExtentTest verifyCart = extentReports.createTest("Verify Cart Item");
 
+        verifyCart = verifyCart.createNode("Verifying items");
+
         List<WebElement> rows_table = driver.findElements(By.tagName("tr"));
 
         System.out.println("rows :- " + rows_table.size());
 
+        String filePath = takeScreenshot("verifyCartItems",verifyCart);
+
         try{
             assertThat(rows_table.size()-1,is(equalTo(validItemCount)));
             verifyCart.log(Status.PASS,"Cart items are verified.");
+            verifyCart.addScreenCaptureFromPath("ScreenShots/" + filePath, "verify Cart Items screenshot");
             log.info("Cart items are verified.");
         }
         catch (AssertionError assertionError) {
             verifyCart.log(Status.FAIL,"Cart items are not matches with selected items.");
             verifyCart.log(Status.FAIL,assertionError.getMessage());
+            verifyCart.addScreenCaptureFromPath("ScreenShots/" + filePath, "verify Cart Items screenshot");
+
             log.error("Cart items are not matches with selected items");
             log.error(assertionError.getMessage());
             assertThat(rows_table.size()-1,is(equalTo(validItemCount)));

@@ -12,10 +12,10 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 public class BasePage extends UtilClass {
 
-    WebDriver driver;
+    public static WebDriver driver;
     public static  ExtentSparkReporter extentSparkReporter;
     public static ExtentReports extentReports = new ExtentReports();
-    Logger log = Logger.getLogger(BasePage.class);
+    public static Logger log = Logger.getLogger(BasePage.class);
 
 
 
@@ -34,6 +34,11 @@ public class BasePage extends UtilClass {
         log.info("Website Url hit");
 
         setDriverAndLog(driver,log);
+
+        ExtentTest readExcelET = extentReports.createTest("Read card details Excel file test");
+        // read card details excl file
+        readCardDetailExcelSheet(readExcelET);
+
     }
 
     // extent report configuration setup
