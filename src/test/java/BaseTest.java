@@ -56,6 +56,7 @@ public class BaseTest extends BasePage{
         }
 
         paymentStatusPage.paymentStatus();
+        paymentStatusPage.validateStatus();
 
     }
 

@@ -7,10 +7,7 @@ import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import org.testng.Assert;
 
 
 import java.time.Duration;
@@ -49,7 +46,7 @@ public class CartPage extends BasePage {
         String filePath = takeScreenshot("verifyCartItems",verifyCart);
 
         try{
-            assertThat(rows_table.size()-1,is(equalTo(validItemCount)));
+            Assert.assertEquals(validItemCount,rows_table.size()-1);
             verifyCart.log(Status.PASS,"Cart items are verified.");
             verifyCart.addScreenCaptureFromPath("ScreenShots/" + filePath, "verify Cart Items screenshot");
             log.info("Cart items are verified.");
@@ -61,7 +58,7 @@ public class CartPage extends BasePage {
 
             log.error("Cart items are not matches with selected items");
             log.error(assertionError.getMessage());
-            assertThat(rows_table.size()-1,is(equalTo(validItemCount)));
+            Assert.assertEquals(validItemCount,rows_table.size()-1);
 
         }
     }
@@ -70,7 +67,6 @@ public class CartPage extends BasePage {
 
     public void payToProcess() {
 
-        ExtentTest paymentTest = extentReports.createTest("Payment Test");
 
         WebElement element = driver.findElement(By.xpath(payBtn));
 

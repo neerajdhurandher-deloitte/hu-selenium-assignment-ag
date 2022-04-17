@@ -16,6 +16,9 @@ public class TemperaturePage extends BasePage{
     String tempTextXpath = "//span[@id = 'temperature']";
     String sunScreenBtnXpath = "//button[text() = 'Buy sunscreens']";
     String moisturizerBtnXpath = "//button[text() = 'Buy moisturizers']";
+    
+    ExtentTest tempTest = extentReports.createTest("Temperature Page Test");
+    ExtentTest tempTestNode = tempTest.createNode("Read Temperature");
 
 
     private int currentTemp;
@@ -31,31 +34,30 @@ public class TemperaturePage extends BasePage{
 
     public void choiceForPurchase() {
 
-        ExtentTest tempTest = extentReports.createTest("Temperature Page Test");
 
 
         log.info("Current temperature is :- " + currentTemp);
-        tempTest.log(Status.PASS, "Current Temperature :- " + currentTemp);
+        tempTestNode.log(Status.PASS, "Current Temperature :- " + currentTemp);
 
-        String filePath = takeScreenshot("Current_Temperature", tempTest);
+        String filePath = takeScreenshot("Current_Temperature", tempTestNode);
 
-        tempTest.addScreenCaptureFromPath("ScreenShots/" + filePath, "Current Temperature Screenshot");
+        tempTestNode.addScreenCaptureFromPath("ScreenShots/" + filePath, "Current Temperature Screenshot");
 
         clickIButton();
 
 
         if (currentTemp < 19) {
-            tempTest.log(Status.PASS, "Purchase Moisturizers");
+            tempTestNode.log(Status.PASS, "Purchase Moisturizers");
             log.info("Purchase Moisturizers");
             goForMoisturizers();
 
         } else if (currentTemp > 34) {
-            tempTest.log(Status.PASS, "Purchase Sunscreens");
+            tempTestNode.log(Status.PASS, "Purchase Sunscreens");
             log.info("Purchase Sunscreens");
             goForSunscreens();
 
         } else {
-            tempTest.log(Status.FAIL, "Invalid Temperature. That is between 20 to 33.");
+            tempTestNode.log(Status.FAIL, "Invalid Temperature. That is between 20 to 33.");
             driver.navigate().refresh();
         }
     }

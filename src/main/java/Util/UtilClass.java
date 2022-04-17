@@ -99,7 +99,7 @@ public class UtilClass {
 
     public String takeScreenshot(String fileName){
 
-        String filePath = screenShotsDestination + fileName +".png";
+        String filePath = screenShotsDestination + fileName + imageExtension;
 
         try {
             BufferedImage image = new Robot().createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
@@ -111,7 +111,7 @@ public class UtilClass {
 
         }
 
-        return fileName;
+        return fileName + imageExtension;
     }
 
 
